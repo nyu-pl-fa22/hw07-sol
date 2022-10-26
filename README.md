@@ -1,32 +1,31 @@
 ﻿# Homework 7 (30 Points + 5 Bonus Points)
 
-The deadline for Homework 7 is ~Friday, April 5~ Monday, April 8, 6pm. The late
-submission deadline is Thursday, April 11, 6pm.
+The deadline for Homework 7 is Wednesday, Nov 9, 10pm. The late
+submission deadline is Tuesday, Nov 15, 10pm.
 
 ## Getting the code template
 
 Before you perform the next steps, you first need to create your own
 private copy of this git repository. To do so, click on the link
 provided in the announcement of this homework assignment on
-Piazza. After clicking on the link, you will receive an email from
+Brightspace. After clicking on the link, you will receive an email from
 GitHub, when your copy of the repository is ready. It will be
 available at
-`https://github.com/nyu-pl-sp19/hw07-<YOUR-GITHUB-USERNAME>`.
+`https://github.com/nyu-pl-fa22/hw07-<YOUR-GITHUB-USERNAME>`.
 Note that this may take a few minutes.
 
-* Open a browser at `https://github.com/nyu-pl-sp19/hw07-<YOUR-GITHUB-USERNAME>` with your Github username inserted at the appropriate place in the URL.
+* Open a browser at `https://github.com/nyu-pl-fa22/hw07-<YOUR-GITHUB-USERNAME>` with your Github username inserted at the appropriate place in the URL.
 * Choose a place on your computer for your homework assignments to reside and open a terminal to that location.
 * Execute the following git command: <br/>
-  ```git clone https://github.com/nyu-pl-sp19/hw07-<YOUR-GITHUB-USERNAME>.git```<br/>
-  ```cd hw07```
+  ```bash
+  git clone https://github.com/nyu-pl-fa22/hw07-<YOUR-GITHUB-USERNAME>.git
+  cd hw07
+  ```
 
 ## Preliminaries
 
-We assume that you have installed a working OCaml distribution,
-including the packages `ocamlfind`, `ocamlbuild`, and `ounit`. Follow
-the instructions in the notes
-for
-[Class 7](https://github.com/nyu-pl-sp19/class07#installation-build-tools-and-ides) if
+We assume that you have installed a working OCaml distribution. Follow
+the [OCaml Setup instructions](https://github.com/nyu-pl-fa22/ocaml-in-class-code) if
 you haven't done this yet.
 
 ## Submitting your solution
@@ -46,7 +45,7 @@ You can replace "solution" by a more meaningful commit message.
 
 Refresh your browser window pointing at
 ```
-https://github.com/nyu-pl-sp19/hw07-<YOUR-GITHUB-USERNAME>/
+https://github.com/nyu-pl-fa22/hw07-<YOUR-GITHUB-USERNAME>/
 ```
 and double-check that your solution has been uploaded correctly.
 
@@ -89,11 +88,11 @@ that we have studied so far and apply them to implement an interpreter
 for the untyped lambda calculus.
 
 More precisely, the goal is to implement an interpreter for a
-dynamically typed subset of OCaml, called *MiniML*. We will implement
-the interpreter in OCaml itself. Most of the code will be given to
-you. Your task will be to implement several functions that are missing
-in the given code. These functions are relatively small but critical
-for the interpreter to work correctly.
+dynamically typed subset of OCaml that we'll call *MiniML*. We will
+implement the interpreter in OCaml itself. Most of the code will be
+given to you. Your task will be to implement several functions that
+are missing in the given code. These functions are critical for the
+interpreter to work correctly.
 
 ### Syntax
 
@@ -215,104 +214,86 @@ variants of the type `term` is fairly direct. The only additional
 complexity in our implementation is that we tag every term with a
 value of type `pos`, which indicates the source code position where
 that term starts in the textual representation of the term given as
-input to our interpreter. We will use this information to provide more
-meaningful error reporting to the programmer.
+input to our interpreter. We will use this information for error
+reporting.
 
 ### Code Structure, Compiling and Editing the Code, Running the Interpreter
 
 The code template contains various OCaml modules that already
 implement most of the functionality needed for our interpreter:
 
-* [src/util.ml](src/util.ml): some useful utility
-  functions and modules (the type `pos` is defined here)
+* [lib/hw07/util.ml](lib/hw07/util.ml): some useful utility
+  functions (the type `pos` is defined here)
 
-* [src/ast.ml](src/ast.ml): definition of abstract syntax
+* [lib/hw07/ast.ml](lib/hw07/ast.ml): definition of abstract syntax
   of MiniML (see above) and related utility functions
 
-* [src/grammar.mly](src/grammar.mly): grammar definition
+* [lib/hw07/grammar.mly](lib/hw07/grammar.mly): grammar definition
   for a parser that parses a MiniML term and converts it into an
-  abstract syntax tree
+  abstract syntax tree of type `term`
 
-* [src/lexer.mll](src/lexer.mll): associated grammar
+* [lib/hw07/lexer.mll](lib/hw07/lexer.mll): associated grammar
   definitions for lexer phase of parser
 
-* [src/parser.ml](src/parser.ml): interface to MiniML
+* [lib/hw07/parser.ml](lib/hw07/parser.ml): interface to MiniML
   parser generated from grammar
 
-* [src/eval.ml](src/eval.ml): the actual MiniML interpreter
+* [lib/hw07/eval.ml](lib/hw07/eval.ml): the actual MiniML interpreter
 
-* [src/miniml.ml](src/miniml.ml): the main entry point of
+* [bin/miniml.ml](bin/miniml.ml): the main entry point of
   our interpreter application (parses command line parameters and the
   input file, runs the input program and outputs the result, error
   reporting)
 
-* [src/hw07_spec.ml](src/hw07_spec.ml): module with unit tests for
-  your code using
-  the [OUnit framework](http://ounit.forge.ocamlcore.org/).
+* [test/hw07_spec.ml](test/hw07_spec.ml): module with unit tests for
+  your code.
 
 The interpreter is almost complete. However, it misses several
 functions that are only implemented as stubs (see below). These
 functions are found in the modules `Ast` and `Eval`. That is, the
 files `ast.ml` and `eval.ml` are the only files that you need to edit
 to complete this part of the homework. Though, we also encourage you
-to add additional unit tests to `hw07_spec.ml` for testing your code.
+to add additional unit tests to `hw07_spec.ml` for testing.
 
-The root directory of the repository contains a shell
-script [`build.sh`](build.sh) that you can use to compile
-your code. Simply execute
-
-```bash
-./build.sh
-```
-
-and this will compile everything. You will have to install
-`ocamlbuild` and `ounit` for this to work. Follow
-the
-[OCaml setup instructions](https://github.com/nyu-pl-sp19/ocaml-setup)
-to do this. Assuming there are no compilation errors, this script will
-produce two executable files in the root directory:
-
-* `miniml.native`: the executable of the MiniML interpreter.
-
-* `hw07_spec.native`: the executable for running the unit tests.
+The directory structure is configured for the OCaml build tool `dune`.
 
 You can find some test inputs for the interpreter in the directory `tests`.
-In order to run the interpreter, execute e.g.
-
+To compile and run the executable program on a test input, execute e.g. the following command in the root directory of the repository:
 ```bash
-./miniml.native tests/test01.ml
+dune exec -- bin/miniml.exe tests/test01.ml
 ```
 
-Note that the interpreter will initially fail with an error message
-`"Not yet implement"` when you run it on some of the tests because you
-first need to implement the missing functions described below.
-
 The interpreter supports the option `-v` which you can use to get some
-additional debug output. In particular, once you have implemented the
-pretty printer for MiniML, using the interpreter with this option will
+additional debug output. In particular, the interpreter will
 print the input program on standard output after it has been parsed.
+
+Note that the interpreter will initially fail with an error message
+`"Not yet implement"` for each unit test.
 
 To run the unit tests, simply execute
 ```bash
-./hw07_spec.native
+dune runtest
 ```
 
-The root directory of the repository also contains a
-file [`.merlin`](.merlin), which is used by
-the [Merlin toolkit](https://github.com/ocaml/merlin) to provide
-editing support for OCaml code in various editors and IDEs. Assuming
+To provide editing support for OCaml in your IDE, we use 
+the [Merlin toolkit](https://github.com/ocaml/merlin). Assuming
 you have set up an editor or IDE with Merlin, you should be able to
 just open the source code files and start editing. Merlin should
 automatically highlight syntax and type errors in your code and
 provide other useful functionality. 
 
-You will need to run `build.sh` at least once so that Merlin is able
-to resolve the dependencies between the different source code files.
+**Important**: Execute `dune build` once immediately after cloning the
+repository. This is needed so that Merlin is able to resolve the
+dependencies between the different source code files.
 
-### Part 1: MiniML Pretty Printer (6 Points)
+### Part 0: Preliminaries (0 Points)
 
-Your first task is to implement a pretty printer for MiniML. That is,
-you need to implement the two functions
+Before you get started, familiarize yourself with the algebraic data
+types defined in `ast.ml` that we use to represent MiniML terms. Also
+familiarize yourself with the predefined functions in `ast.ml` and
+`eval.ml`.
+
+You'll find the following two functions useful for pretty printing MiniML terms:
 
 ```ocaml
 string_of_term: term -> string
@@ -320,126 +301,56 @@ string_of_term: term -> string
 print_term: out_channel -> term -> unit
 ```
 
-in `ast.ml`. The function `string_of_term` takes the AST of a MiniML
-term as input and is supposed to convert it into its textual
-representation. E.g. the code
+These functions are defined in `ast.ml`. Moreover, `parser.ml` defines a function
 
 ```ocaml
-let t =
-  Lambda ("x", BinOp (Mult, IntConst (2, dummy_pos),
-                      BinOp (Plus, Var ("x", dummy_pos), IntConst (3, dummy_pos), dummy_pos),
-                      dummy_pos), dummy_pos)
-in
-string_of_term t
+parse_from_string: string -> term
 ```
 
-should yield the string
+that takes the string representation of a MiniML term and parses it
+into its AST representation. You may find this function useful for
+testing your code.
 
-```ocaml
-fun x -> 2 * (x + 3)
-```
 
-Here, we use `dummy_pos` as a place-holder value for the source code
-position of each subterm.
+### Part 1: Finding a Free Variable in a Term (3 Points)
 
-You are allowed to have additional redundant parenthesis in the output
-string as in
-
-```ocaml
-(fun x -> (2 * (x + 3)))
-```
-
-In general, your implementation of the function `string_of_term`
-should satisfy the following specification: for all terms `t`
-
-```
-equal t (Parser.parse_from_string (string_of_term t)) = true
-```
-
-Here, the predefined function `Parser.parse_from_string` parses the
-string representation of a MiniML term and produces its AST
-representation as a value of type `term`. The function `equal` is
-defined in `ast.ml` and checks whether two MiniML terms are
-structurally equal when one ignores the source code position
-tags. Thus, the above requirement expresses that pretty printing a
-term represented as an AST and parsing it back to an AST, yields the
-same AST (modulo source code positions). The file `tests.ml`
-contains several unit tests that uses this condition to test your
-implementation. We encourage you to add more test cases there.
-
-The second function `print_term`, which you also need to implement,
-should print the string representation of the given term to the given
-output channel. E.g. calling
-
-```ocaml
-print_term stdout t
-```
-
-will print the term `t` to standard output.
-
-A straightforward implementation of these two functions is to
-implement `string_of_term` by building the string representation of
-the term recursively from its parts using string concatenation (`^`),
-and then implement `print_term` using `string_of_term` and one of the
-functions provided by the
-module
-[`Printf`](https://caml.inria.fr/pub/docs/manual-ocaml/libref/Printf.html) in
-the OCaml standard library. However, this is both inefficient and
-nonidiomatic, and therefore strongly discouraged.
-
-Instead, use
-OCaml's
-[Format](https://caml.inria.fr/pub/docs/manual-ocaml/libref/Format.html) module
-to implement the pretty printer by implementing a function:
-
-```ocaml
-pr_term: Format.formatter -> term -> unit
-```
-
-The function `pr_term` can then be used to implement both
-`string_of_term` and `print_term`. These implementations are already
-provided for you.
-
-Study how the `Format` module works. Challenge yourself and try to
-produce nicely formatted output that uses the functionality of
-`Format` to automatically add line breaks and indentation in your
-output as needed. Also, try to minimize the number of parenthesis that
-you produce in your output by taking advantage of operator precedence
-and associativity. You will find the predefined functions `precedence`
-and `is_left_associative` in the `Ast` module helpful for this. You
-may even want to reintroduce `let` bindings in your generated output
-to make it easier to read.
-
-**Hint:** [this tutorial](https://ocaml.org/learn/tutorials/format.html)
-discusses how to use the `Format` module and provides an
-example towards the end that solves a very similar
-problem than the one you have to implement here. So use that tutorial
-to get started.
-
-### Part 2: Finding a Free Variable in a Term (4 Points)
-
-Your second task is to implement a function `find_free_var` that,
+Your first task is to implement a function `find_free_var` that,
 given a term `t`, checks whether `t` contains a free variable and if
 so, returns that variable together with its source code position. We
-use an `option` type to capture the case that `t` may not contain any
+use an `option` type to capture the case when `t` does not contain any
 free variables:
 
 ```ocaml
 find_free_var: term -> (var * pos) option
 ```
 
+Recall that the type `'a option` is defined as follows:
+
+```ocaml
+type 'a option =
+  | None
+  | Some of 'a
+```
+
+That is, your implementation should return `None` if `t` does not contain
+any free variables. Otherwise, it should return `Some (x, pos)` where
+`x` is the first variable that occurs free in `t` if `t` is traversed
+left-to-right and `pos` is the associated source code position of that
+occurrence of `x`.
+
 You can find some unit tests for this function in `tests.ml`.
 
 The main function in `miniml.ml` uses the function `find_free_var` to
-check whether all the variables occurring in the input program given
-to the interpreter are properly declared and if not, produce an
-appropriate error message.
+check whether in input file contains a valid MiniML program, i.e.,
+that the term in the input file is closed. If the term contains a free
+variable, the main function generates an appropriate error message
+using the information provided by `find_free_var`.
 
-Hint: you might find the functions provided by the module `Opt` in
-`util.ml` helpful when implementing `find_free_var` (especially, the
-functions `Opt.or_else` respectively `Opt.lazy_or_else`).
+Hint: use pattern matching on the values of type `(var * pos) option`
+when recursively searching for free occurrences of variables in
+subterms.
 
-### Part 3: Substitution for Beta Reduction (5 Points)
+### Part 2: Substitution for Beta Reduction (5 Points)
 
 Your next task for this problem is to implement a function
 
@@ -454,9 +365,9 @@ subst t x s
 ```
 
 computes the term `t[s/x]` obtained from `t` by substituting all free
-occurrences of `x` in `t` by `s`. This function is used by the
-interpreter in module `Eval` to evaluate function applications via
-beta-reduction.
+occurrences of `x` in `t` by `s`. You will use this function later to
+implement the interpreter in module `Eval`. Specifically, it will be
+used to evaluate function applications using beta-reduction.
 
 Since our interpreter will only evaluate closed terms (i.e. terms that
 have no free variables), the interpreter maintains the invariant that
@@ -467,56 +378,135 @@ we do not have to account for alpha-renaming of bound variables within
 variables that could be captured).
 
 Some unit tests are already provided for you. Write additional unit
-tests on your own. In addition, you can run the interpreter on the
-input programs in [`tests/`](tests/) to make sure that it works as
-expected. Feel free to write more input programs yourself and use them
-for further testing.
+tests on your own. 
 
-### Part 4: Call-by-name Evaluation (3 Points)
+### Part 3: Call-by-value Evaluation (8 Points)
 
 The actual MiniML interpreter is implemented by the function `eval` in
 module `Eval` (`eval.ml`). This function takes in a MiniML term and
-reduces it to a value using beta reduction. The function `eval` is
-parameterized by another function
+reduces it to a `value` using beta-reduction. The type `value` is defined as follows:
 
 ```ocaml
-beta: term -> term -> pos -> value`
+type value =
+  | IntVal of int (* An integer value i *)
+  | BoolVal of bool (* A Boolean value b *)
+  | Closure of var * term * env (* A closure (x,t,e) that abstracts x in t in environemnt e *)
 ```
 
+The three variants correspond to the three possible normal forms that
+evaluation of a MiniML term can produce. In particular, a value
+`Closure (x, t, e)` represents an anonymous function value `fun x -> t`. 
+You can ignore the third component `e` of `Closure` values for
+now. It will only be relevant for the optional bonus problem (Part 5).
+
+The function `eval` is parameterized by another function
+
+```ocaml
+beta: term -> term -> pos -> value
+```
 that implements the beta reduction step and determines the evaluation
 strategy used for evaluating function applications. The `eval`
 function calls `beta t1 t2 pos` whenever it encounters a function
-application term `t1 t2` at some source position `pos`. The function
+application term `t1 t2` at some source position `pos` (i.e., `App (t1, t2, pos)`). The function
 `beta` should then evaluate `t1 t2` and return the resulting value
 back to `eval`. The source code position `pos` is only used for error
 reporting.
 
-The module `Eval` already provides one implementation of `beta`, which
-is given by the function `beta_call_by_value`. This function
-implements the evaluation of function applications using call-by-value
-semantics. The interpreter resulting from combining `eval` and
-`beta_call_by_value` is given by the function `eval_by_value`.
+Your first task is to implement the missing cases in the function
+`eval`. In particular, you will need to implement the cases for
+evaluating Boolean negation, binary operators, and conditional
+expressions. For instance, if you want to evaluate a term of the shape
+`BinOp (Add, t1, t2, pos)`, then you can call `eval beta` recursively
+to evaluate the subterms `t1` and `t2` and then combine the result
+values appropriately (e.g., add them in the case of `Add`).
 
-Familiarize yourself with the implementations of the functions `eval`
-and `beta_call_by_value`, then add the missing implementation for the
-function `beta_call_by_name`. This function should be like
-`beta_call_by_value` but instead implement the beta-reduction step for
-function applications using call-by-name semantics.
-
-You can test your code using the provided unit tests. Additionally, if
-you run `miniml.native` with the option `-call-by-name`, then it will
-use your implementation of `beta_call_by_name` to evaluate the input
-program. Note that since MiniML is completely side-effect free, the
-only way in which call-by-value and call-by-name can be easily
-distinguished (without peeking into the interpreter) is by their
-termination behavior. For example, the following MiniML term evaluates
-to `0` when using call-by-name semantics, while it diverges when it is
-evaluated with call-by-value semantics:
+We aim for a dynamically typed semantics of our language. In
+particular, evaluating expressions like `2 + false` or `if 3 then 1
+else 2` should produce a *dynamic type error*. You'll find the
+following predefined functions useful for implementing this
+behavior:
 
 ```ocaml
-(fun f -> 0) ((fun x -> x x) (fun x -> x x))
+int_of_value: pos -> value -> int
+bool_of_value: pos -> value -> bool
+closure_of_value: pos -> value -> var * term * env
 ```
 
+Each of these function takes a source code position and a value and
+then coerces the given value to the appropriate OCaml type.  For
+instance, `int_of_value pos (IntVal i)` will return `i`. On the other
+hand, `int_of_value pos (BoolVal b)` will throw an exception that
+indicates a dynamic type error because we are expecting an `int` value
+but got a `bool`. The generated type error message will use `pos` to
+indicate the source code position where the error occurred.
+
+Hence, when you evaluate `BinOp (Add, t1, t2, pos)`, you can use
+`int_of_value` to coerce the result values obtained from the recursive
+evaluation of `t1` and `t2` to type `int` so that you can add them and
+produce a result value `IntVal r` for `BinOp (Add, t1, t2, pos)`. Here,
+`r` is the result of the addition. Proceed similarly for all the cases
+that you need to implement.
+
+Your next task is to implement the function
+```ocaml
+beta_by_value: term -> term -> pos -> value
+```
+This function should implement the beta-reduction rule for function
+applications following the applicative-order evaluation strategy (i.e.,
+call-by-value semantics). Use your function `subst` from Part 2 for
+your implementation.
+
+The predefined function `eval_by_value` then combines `eval` and
+`beta_by_value` to obtain a complete implementation of our MiniML
+interpreter based on call-by-value semantics. The file `hw07_spec.ml`
+has a series of unit tests that calls this function. Use this to test
+your code and feel free to add additional unit tests.
+
+Also, if you run the MiniML executable without any options,
+then it will use your implementation of
+`eval_by_value` to evaluate the input program:
+
+```bash
+dune exec -- bin/miniml.exe tests/test01.ml
+```
+
+You can add the option `-v` to get more verbose output.
+
+
+### Part 4: Call-by-name Evaluation (2 Points)
+
+Similar to the second task in Part 3, implement the function
+```ocaml
+beta_by_name: term -> term -> pos -> value`
+```
+This function should implement the beta-reduction rule for function
+applications following the normal-order evaluation strategy (i.e.,
+call-by-name semantics). Again, use your function `subst` from Part 2 for
+your implementation.
+
+The predefined function `eval_by_name` then combines `eval` and
+`beta_by_name` to obtain a complete implementation of our MiniML
+interpreter based on call-by-name semantics. The file `hw07_spec.ml`
+has a series of unit tests that calls this function. Use this to test
+your code and feel free to add additional unit tests.
+
+Additionally, if you run the MiniML executable with the option
+`-call-by-name`, then it will use your implementation of
+`eval_by_name` to evaluate the input program:
+
+```bash
+dune exec -- bin/miniml.exe tests/test01.ml -call-by-name
+```
+
+Note that since MiniML is completely side-effect free, the only way in
+which call-by-value and call-by-name can be easily distinguished
+(without peeking into the interpreter) is by their termination
+behavior. For example, consider the following MiniML term:
+```ocaml
+(fun x -> 0) (1 / 0)
+```
+This term evaluates to `0` under call-by-name semantics, while it
+crashes with an integer division error under call-by-value semantics.
 
 ### Part 5: (optional, 5 Bonus Points)
 
@@ -544,7 +534,7 @@ in our language arises. If we want deep binding semantics, then
 whenever we construct a function value, we need to remember the
 current reference environment so that we can restore it whenever we
 call that function later. So we also have to define our notion of
-closures in the type value accordingly. This leads to the following
+closures in the type `value` accordingly. This leads to the following
 mutually recursive type definition in `ast.ml`:
 
 ```ocaml
@@ -574,22 +564,7 @@ where `env` is the current reference environment that stores the
 bindings for the free variables in the term `t` that we want to
 evaluate.
 
-For the most part, this is straightforward. E.g. the case for addition
-operations could now look something like this:
-
-```ocaml
-...
-| BinOp (Plus, t1, t2, pos) -> 
-  let v1 = eval env t1 in
-  let v2 = eval env t2 in
-  let pos1 = pos_of_term t1 in
-  let pos2 = pos_of_term t2 in
-  IntVal (int_of_value pos1 v1 + int_of_value pos2 v2)
-```
-
-Here, we simply pass the current reference environment `env` to the
-recursive calls that evaluate the subexpressions `t1` and `t2`.
-
+For the most part, this is straightforward. 
 The tricky cases will be the ones that create `Closure` values and the
 case for function applications. Function applications should no longer
 use `subst` but instead simply evaluate the body expression of the
@@ -597,8 +572,8 @@ closure with the appropriate environment. Depending on how you
 implement this, you will end up with static scoping + deep binding or
 dynamic scoping + shallow binding.
 
-Since terms that are interpreted can now contain free variables, you
-also need to consider the case in `eval` where `t` is of the form `Var x`. 
+Since the interpreted terms can now contain free variables, you also
+need to consider the case in `eval` where `t` is of the form `Var x`.
 In the current implementation, an exception is thrown because
 beta-reduction with `subst` guarantees that we will never have free
 variables. Think about how to implement this case in the new
@@ -611,12 +586,12 @@ since you have to consider the parameter of the function).
 A stub of the environment-based interpreter is provided by the
 function `eval_with_envs` in `eval.ml`. You only need to complete the
 missing nested function `eval`, which is the actual interpreter and
-has the type given above.  Since we ensure that prog is closed
+has the type given above.  Since we ensure that the initial input term is closed
 (i.e. has no free variables) we can start evaluation of the term `t`
 passed to `eval_with_envs` with an empty environment `[]`.
 
 You will have to write your own unit tests to test your code. If you
-want to test your code using the main executable `miniml.native`, you
+want to test your code using the MiniML executable, you
 can use the command line option `-bonus`, which will call
 `eval_with_envs` with the parsed input program.
 
