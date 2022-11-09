@@ -1,6 +1,6 @@
 ﻿# Homework 7 (30 Points + 5 Bonus Points)
 
-The deadline for Homework 7 is Wednesday, Nov 9, 10pm. The late
+The deadline for Homework 7 is Friday, Nov 11, 10pm. The late
 submission deadline is Tuesday, Nov 15, 10pm.
 
 ## Getting the code template
@@ -70,7 +70,9 @@ submitting your solution to this problem, you may use the notation
    1. Calculate the set of free variables appearing in *t*.
 
 2. Using the definitions from class, compute the normal form of the
-   following lambda term. Show all β-reduction steps.
+   following lambda term where *`iszero`*, *`mult`*, *`0`*, etc refer
+   to the Church encodings of natural numbers and their operations
+   given in the notes for Class 7. Show all β-reduction steps.
 
    *`iszero` (`mult` `0` `1`) `2` `3`*
 
@@ -416,7 +418,7 @@ Your first task is to implement the missing cases in the function
 `eval`. In particular, you will need to implement the cases for
 evaluating Boolean negation, binary operators, and conditional
 expressions. For instance, if you want to evaluate a term of the shape
-`BinOp (Add, t1, t2, pos)`, then you can call `eval beta` recursively
+`BinOp (Add, t1, t2, pos)`, then you can call `eval` recursively
 to evaluate the subterms `t1` and `t2` and then combine the result
 values appropriately (e.g., add them in the case of `Add`).
 
