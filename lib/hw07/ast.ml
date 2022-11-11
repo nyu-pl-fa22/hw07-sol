@@ -192,6 +192,10 @@ let rec equal t1 t2 =
         
 (** Part 2: find the first free variable in term [t] if it exists and return it together with its position *)
 let find_free_var (t: term) : (var * pos) option =
+  let or_else f t = function
+    | None -> f t
+    | s -> s
+  in
   let rec fv bound = function
     | FunConst _ | IntConst _ | BoolConst _ -> None
     | Var (x, pos) ->
@@ -201,11 +205,11 @@ let find_free_var (t: term) : (var * pos) option =
     | App (t1, t2, _)
     | BinOp (_, t1, t2, _) ->
         fv bound t1 |>
-        Opt.lazy_or_else (fv bound) t2
+        or_else (fv bound) t2
     | Ite (t1, t2, t3, _) ->
         fv bound t1 |>
-        Opt.lazy_or_else (fv bound) t2 |>
-        Opt.lazy_or_else (fv bound) t3
+        or_else (fv bound) t2 |>
+        or_else (fv bound) t3
     | Lambda (x, t, _) ->
         fv (x :: bound) t
   in

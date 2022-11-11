@@ -37,7 +37,7 @@ let () =
       let prog = Parser.parse_from_file !input_file in
       let _ =
         find_free_var prog |>
-        Opt.map (fun (x, pos) -> fail pos ("Unbound value " ^ x))
+        Option.map (fun (x, pos) -> fail pos ("Unbound value " ^ x))
       in
       let _ =
         if !verbose then begin

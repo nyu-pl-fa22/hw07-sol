@@ -46,7 +46,7 @@ let eval beta (t: term) : value =
       Closure ("f", fn, [])
   | FunConst (Not, pos) ->
       let x = Var ("x", pos) in
-      let fn = Lambda ("x", App (t, x, pos), pos) in
+      let fn = App (t, x, pos) in
       Closure ("x", fn, [])
   | IntConst (i, _) -> IntVal i
   | BoolConst (b, _) -> BoolVal b
@@ -111,9 +111,13 @@ let eval beta (t: term) : value =
 
 (** beta-reduction step using call-by-value semantics *)
 let rec beta_call_by_value (t1: term) (t2: term) (pos: pos) : value =
+  print_endline ("t1: " ^ string_of_term t1);
+  print_endline ("t2: " ^ string_of_term t2);
   let v1 = eval beta_call_by_value t1 in
   let x, t, _ = closure_of_value (position_of_term t1) v1 in
+  print_endline ("body: " ^ string_of_term t);
   let v2 = eval beta_call_by_value t2 in
+  print_endline ("subst: " ^ string_of_term (subst t x (term_of_value (position_of_term t2) v2)));
   eval beta_call_by_value (subst t x (term_of_value (position_of_term t2) v2))
 
 
